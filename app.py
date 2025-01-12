@@ -20,21 +20,21 @@ def get_recommendations(activity: str, time_until_activity: float):
         "You are a nutrition advisor. "
         "Given the following activity and time until that activity, provide guidance on what to consume. "
         "Output a JSON with exactly four keys: 'foods_to_eat', 'foods_to_avoid', 'do_eat', and 'avoid'. "
-        "1) 'foods_to_eat': a list of 15 sensible snacks, drinks, or supplements that a 17-year-old would want to eat and could realistically find."
+        "1) 'foods_to_eat': a list of 15 sensible snacks, drinks, or supplements that a 17-year-old would want to eat and could easily find."
         "2) 'foods_to_avoid': a list of 15 foods or drinks that a 17-year-old should avoid. "
         "3) 'do_eat': a short text with recommended macronutrient ratios/percentages (plain text). "
         "4) 'avoid': a short text description of foods to avoid (plain text). "
         "Be sure each list has exactly 15 items. Return only valid JSON, no extra commentary.\n\n"
         f"Activity: {activity}\n"
         f"Time until activity: {time_until_activity} hours\n\n"
-        "Remember to return only valid JSON."
+        "Again, provide only valid JSON with those four keys, and do not add extra keys, disclaimers, or text."
     )
 
     # Build the list of messages for the chat model
     messages = [
         {
             "role": "developer",
-            "content": "You are a helpful expert is sports performance that provides meal guidance."
+            "content": "You are a helpful expert in sports performance that provides meal guidance."
         },
         {
             "role": "user",
