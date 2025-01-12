@@ -20,7 +20,7 @@ def get_recommendations(activity: str, time_until_activity: float):
         "You are a nutrition advisor. "
         "Given the following activity and time until that activity, provide guidance on what to consume. "
         "Output a JSON with exactly four keys: 'foods_to_eat', 'foods_to_avoid', 'do_eat', and 'avoid'. "
-        "1) 'foods_to_eat': a list of 15 sensible snacks, drinks, or supplements that a 17-year-old could realistically find. "
+        "1) 'foods_to_eat': a list of 15 sensible snacks, drinks, or supplements that a 17-year-old would want to eat and could realistically find. Order the list to have the most performance enhancing items at the top."
         "2) 'foods_to_avoid': a list of 15 foods or drinks that a 17-year-old should avoid. "
         "3) 'do_eat': a short text with recommended macronutrient ratios/percentages (plain text). "
         "4) 'avoid': a short text description of foods to avoid (plain text). "
@@ -34,7 +34,7 @@ def get_recommendations(activity: str, time_until_activity: float):
     messages = [
         {
             "role": "developer",
-            "content": "You are a helpful nutrition assistant that provides meal guidance."
+            "content": "You are a helpful expert is sports performance that provides meal guidance."
         },
         {
             "role": "user",
@@ -43,7 +43,7 @@ def get_recommendations(activity: str, time_until_activity: float):
     ]
 
     completion = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-4o",
         messages=messages,
         temperature=0.7
     )
