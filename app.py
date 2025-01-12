@@ -17,11 +17,11 @@ def get_recommendations(activity: str, time_until_activity: float):
     """
 
     prompt = (
-        "You are a nutrition advisor. "
+        "You are a sports performance expert. "
         "Given the following activity and time until that activity, provide guidance on what to consume. "
         "Output a JSON with exactly four keys: 'foods_to_eat', 'foods_to_avoid', 'do_eat', and 'avoid'. "
-        "1) 'foods_to_eat': a list of 15 sensible snacks, drinks, or supplements that a 17-year-old would want to eat and could easily find."
-        "2) 'foods_to_avoid': a list of 15 foods or drinks that a 17-year-old should avoid. "
+        "1) 'foods_to_eat': a list of 15 sensible snacks, drinks, or supplements that a 17-year-old would want to eat and could easily find. Next to each item list to macronutrient contents."
+        "2) 'foods_to_avoid': a list of 15 foods or drinks that a 17-year-old should avoid. Next to each item list to macronutrient contents."
         "3) 'do_eat': a short text with recommended macronutrient ratios/percentages (plain text). "
         "4) 'avoid': a short text description of foods to avoid (plain text). "
         "Be sure each list has exactly 15 items. Return only valid JSON, no extra commentary.\n\n"
