@@ -86,8 +86,9 @@ def filter_best_candidates(macro_summary, candidate_text):
 
     Now:
     1) Evaluate each item qualitatively for how closely it matches the recommended macros.
-    2) Select the closest matches to the recommended macros that a 17 year old would choose to eat AND is available from a convenience store or fast food restaurant.
-    3) Return them as a bullet list of up to 10 items, no extra commentary.
+    2) Select the closest matches to the recommended macros. 
+    3) Prioritize the items that a 17 year old would definitely choose to eat AND is available from a convenience store or fast food restaurant.
+    4) Return them as a bullet list of up to 5 items, no extra commentary.
     """
 
     messages = [
@@ -142,7 +143,7 @@ def filter_ok_candidates(macro_summary, candidate_text, best_list_text):
     Now:
     1) Evaluate each 'OK' item. Confirm it's not as ideal as the 'Best' list items.
     2) Choose the healthiest from this 'OK' pool that a 17 year old would choose to eat AND is available from a convenience store or fast food restaurant.
-    3) Return them as a bullet list of 10 items or fewer, no extra commentary.
+    3) Return them as a bullet list of 5 items or fewer, no extra commentary.
     """
 
     messages = [
@@ -198,7 +199,7 @@ def filter_avoid_candidates(macro_summary, candidate_text):
     1) Evaluate each item as a poor choice for this scenario.
     2) Which 10 are most likely to be chosen by a 17-year-old 
        but still conflict with the recommended macros?
-    3) Return them as a bullet list of 10 items, no extra commentary.
+    3) Return them as a bullet list of 5 items, no extra commentary.
     """
 
     messages = [
