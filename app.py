@@ -23,15 +23,11 @@ def step_one_get_macros(activity, time_until):
     based on the specific activity and time.
     """
     user_content = f"""
-    You are a sports nutrition expert. 
-    The athlete is 17 years old, with only convenience stores 
-    or fast-food places available (e.g., 7-Eleven, McDonald’s, Chipotle).
-    The upcoming activity is {activity}, starting in {time_until} hours.
+    You are a sports nutrition expert. The upcoming activity is {activity}, starting in {time_until} hours.
     
     1) What macronutrient ratio (carbs/protein/fats) do you recommend 
        for the pre-activity meal/snack, and why?
-    2) Keep your answer brief and in plain text.
-    3) Do not include disclaimers or extra commentary.
+    2) Do not include other information, only the macronutrient ratio.
     """
 
     messages = [
@@ -43,20 +39,20 @@ def step_one_get_macros(activity, time_until):
 
 def step_two_get_best_foods(macro_summary):
     """
-    Step 2: Return a bulleted list of 'Best' food choices 
-    that match the macro_summary from Step 1.
-    Each item should have approximate carbs/fats/protein percentages.
+    Step 2: Return a bulleted list of 'Best' meal choices 
+    that match the macro_summary from Step 1, including food and drink to optimize performance.
+    Each item should have approximate carbs/fats/protein percentages. The athlete is 17 years old, with only convenience stores 
+    or fast-food places available (e.g., 7-Eleven, McDonald’s, Chipotle).  
     """
     user_content = f"""
     You previously stated the recommended macronutrient ratio is:
     {macro_summary}
 
     Now:
-    - Return a bulleted list of around 10 'Best' food choices (not more than 10 items).
-    - Each item must be realistic for a 17-year-old at a convenience store 
-      or fast-food chain (e.g., 7-Eleven, McDonald’s, Chipotle).
-    - Each item must include approximate carbs, fats, and protein percentages 
-      in parentheses, e.g. (Carbs: 50, Fats: 20, Protein: 30).
+    - Return a bulleted list of around 10 'Best' meal choices including food and drink to optimize performance (not more than 10 items).
+    - Each item must be realistic for a 17-year-old to find at a convenience store 
+      or fast-food chain (e.g., 7-Eleven, McDonald’s, Chipotle, etc).
+    - Each item must include approximate carbs, fats, and protein percentages in parentheses, e.g. (Carbs: 50%, Fats: 20%, Protein: 30%).
     - No extra commentary or disclaimers.
     - Keep it very concise.
     """
@@ -70,16 +66,16 @@ def step_two_get_best_foods(macro_summary):
 
 def step_three_get_ok_foods(macro_summary):
     """
-    Step 3: Return a bulleted list of 'OK' food choices 
+    Step 3: Return a bulleted list of 'OK' meal choices including food and drink to optimize performance (not more than 10 items).
     with approximate macros, still referencing the macro_summary.
     """
     user_content = f"""
     Given the recommended macronutrient ratio: 
     {macro_summary}
 
-    - Now return a bulleted list of around 10 'OK' food choices. 
-    - These are acceptable, but not ideal. 
-    - Each item must have approximate carbs/fats/protein in parentheses.
+    - Now return a bulleted list of around 10 'OK' meal choices including food and drink to optimize performance (not more than 10 items).
+    - These are acceptable, but not ideal. Each item must be realistic for a 17-year-old to find at a convenience store or fast-food chain (e.g., 7-Eleven, McDonald’s, Chipotle, etc).
+    - Each item must include approximate carbs, fats, and protein percentages in parentheses, e.g. (Carbs: 50%, Fats: 20%, Protein: 30%).
     - No extra commentary or disclaimers.
     """
 
