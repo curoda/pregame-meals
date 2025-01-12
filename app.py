@@ -7,43 +7,45 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 def get_recommendations(activity: str, time_until_activity: float):
     """
-    Query the gpt-4o-mini model to get:
-      - foods_to_eat (15 items)
+    Query the gpt-4o or gpt-4o-mini model to get:
+      - best_foods (15 items)
+      - ok_foods (15 items)
       - foods_to_avoid (15 items)
       - do_eat (plain text)
       - avoid (plain text)
 
-    Each list should be suitable for a 17-year-old's realistic options.
+    Each list should be geared toward convenience or fast-food items
+    that a 17-year-old can realistically find.
     """
 
     prompt = (
-        "You are a sports performance expert. "
-        "Provide guidance on what to consume for the following activity: "
-        f"{activity}, with {time_until_activity} hours until that activity. "
-        "Output only valid JSON with exactly four keys: 'foods_to_eat', 'foods_to_avoid', 'do_eat', and 'avoid'. "
+        "You are a sports performance expert advising a 17-year-old who can only shop at convenience stores "
+        "or fast-food places (e.g., 7-Eleven, McDonald’s, Chipotle). They have an upcoming activity: "
+        f"{activity}, in {time_until_activity} hours. "
         "\n\n"
-        "1) 'foods_to_eat': a list of 15 meal or snack items that a 17-year-old could realistically find at a "
-        "convenience store (e.g., 7-Eleven) or from a fast-food place (e.g., Chipotle). "
-        "Each item should be a short string including the food name and approximate macronutrient percentages for carbs, fats, and protein. "
-        "For example: 'Grilled Chicken Burrito (Carbs: 45, Fats: 20, Protein: 35)'. "
+        "Return only valid JSON with exactly five keys: 'best_foods', 'ok_foods', 'foods_to_avoid', 'do_eat', and 'avoid'. "
+        "No extra commentary or disclaimers, and do not add additional keys. "
         "\n\n"
-        "2) 'foods_to_avoid': a list of 15 items that a 17-year-old should avoid. Each item should also be a short string "
-        "with the name plus approximate carbs/fats/protein. For example: 'Glazed Doughnut (Carbs: 70, Fats: 25, Protein: 5)'. "
+        "1) 'best_foods': Provide exactly 15 meal/snack items that are ideal for performance. "
+        "Each item should be a short string including approximate carb/fat/protein percentages in parentheses, "
+        "e.g. \"Grilled Chicken Bowl (Carbs: 45, Fats: 20, Protein: 35)\". "
         "\n\n"
-        "3) 'do_eat': a short plain-text explanation of recommended macronutrient ratios. "
+        "2) 'ok_foods': Provide exactly 15 items that are acceptable but not ideal. Same format (name + macronutrient parentheses). "
         "\n\n"
-        "4) 'avoid': a short plain-text explanation of which types of foods or drinks to avoid. "
+        "3) 'foods_to_avoid': Provide exactly 15 items to avoid. Also use the same short string format. "
         "\n\n"
-        "Return only valid JSON with the keys 'foods_to_eat', 'foods_to_avoid', 'do_eat', and 'avoid'. "
-        "No disclaimers or extra commentary, and do not add additional keys."
+        "4) 'do_eat': A short plain-text explanation of the recommended macronutrient ratios or nutrients that are beneficial. "
+        "\n\n"
+        "5) 'avoid': A short plain-text explanation of which foods or drinks to avoid. "
+        "\n\n"
+        "Again, output only valid JSON with those five keys—best_foods, ok_foods, foods_to_avoid, do_eat, avoid—and nothing else."
     )
-
 
     # Build the list of messages for the chat model
     messages = [
         {
             "role": "developer",
-            "content": "You are a helpful expert in sports performance that provides meal guidance."
+            "content": "You are a helpful sports nutrition assistant. Output valid JSON only."
         },
         {
             "role": "user",
@@ -51,8 +53,9 @@ def get_recommendations(activity: str, time_until_activity: float):
         }
     ]
 
+    # Call your desired model; adjust model name as needed
     completion = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-4o-mini",  # or "gpt-4o"
         messages=messages,
         temperature=0.7
     )
@@ -66,7 +69,8 @@ def get_recommendations(activity: str, time_until_activity: float):
     except json.JSONDecodeError:
         # Fallback if JSON parsing fails
         data = {
-            "foods_to_eat": [],
+            "best_foods": [],
+            "ok_foods": [],
             "foods_to_avoid": [],
             "do_eat": "Error parsing JSON from the model.",
             "avoid": "Error parsing JSON from the model.",
@@ -89,31 +93,48 @@ def main():
         with st.spinner("Getting your recommendations..."):
             results = get_recommendations(activity, time_until)
 
-        foods_to_eat = results.get("foods_to_eat", [])
+        best_foods = results.get("best_foods", [])
+        ok_foods = results.get("ok_foods", [])
         foods_to_avoid = results.get("foods_to_avoid", [])
         do_eat = results.get("do_eat", "")
         avoid = results.get("avoid", "")
 
         # --- Show the DO EAT / AVOID text at the top (in plain text) ---
-        st.subheader("DO EAT")
+        st.subheader("Recommended Macronutrient Ratios (DO EAT)")
         st.write(do_eat)
 
-        st.subheader("AVOID")
+        st.subheader("General Avoidance Guidance")
         st.write(avoid)
 
-        # --- Foods to Eat ---
-        st.subheader("Foods to Eat")
-        if foods_to_eat:
-            for food in foods_to_eat[:5]:
+        # --- Best Foods to Eat ---
+        st.subheader("Best Foods to Eat")
+        if best_foods:
+            # Show first 5
+            for food in best_foods[:5]:
                 st.write(f"- {food}")
 
             # Show more link
-            if len(foods_to_eat) > 5:
-                with st.expander("Show more foods to eat"):
-                    for food in foods_to_eat[5:]:
+            if len(best_foods) > 5:
+                with st.expander("Show more best foods"):
+                    for food in best_foods[5:]:
                         st.write(f"- {food}")
         else:
-            st.write("No foods to eat found.")
+            st.write("No best foods found.")
+
+        # --- OK Foods to Eat ---
+        st.subheader("OK Foods to Eat")
+        if ok_foods:
+            # Show first 5
+            for food in ok_foods[:5]:
+                st.write(f"- {food}")
+
+            # Show more link
+            if len(ok_foods) > 5:
+                with st.expander("Show more OK foods"):
+                    for food in ok_foods[5:]:
+                        st.write(f"- {food}")
+        else:
+            st.write("No OK foods found.")
 
         # --- Foods to Avoid ---
         st.subheader("Foods to Avoid")
