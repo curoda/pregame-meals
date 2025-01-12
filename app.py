@@ -46,8 +46,8 @@ def get_recommendations(activity: str, time_until_activity: float):
         temperature=0.7
     )
 
-    # Extract the model's reply content
-    model_reply_content = completion.choices[0].message["content"].strip()
+    # Extract the model's reply content from the message's 'content' attribute
+    model_reply_content = completion.choices[0].message.content.strip()
 
     # Attempt to parse the JSON response
     try:
