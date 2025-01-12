@@ -86,10 +86,10 @@ def main():
         avoid = results.get("avoid", "")
 
         # --- Show the DO EAT / AVOID text at the top (in plain text) ---
-        st.subheader("Macronutrient Recommendations (DO EAT)")
+        st.subheader("DO EAT")
         st.write(do_eat)
 
-        st.subheader("General Avoidance Guidance (AVOID)")
+        st.subheader("AVOID")
         st.write(avoid)
 
         # --- Foods to Eat ---
