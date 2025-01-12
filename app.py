@@ -18,17 +18,26 @@ def get_recommendations(activity: str, time_until_activity: float):
 
     prompt = (
         "You are a sports performance expert. "
-        "Given the following activity and time until that activity, provide guidance on what to consume. "
-        "Output a JSON with exactly four keys: 'foods_to_eat', 'foods_to_avoid', 'do_eat', and 'avoid'. "
-        "1) 'foods_to_eat': a list of 15 pre-activity meals that include food, drinks, or supplements that a 17-year-old would want to eat and could reasonably find. Next to each item in the list, show the percent of carbs, fats, and protien."
-        "2) 'foods_to_avoid': a list of 15 foods or drinks that a 17-year-old should avoid. Next to each item in the list, show the percent of carbs, fats, and protien."
-        "3) 'do_eat': a short text with recommended macronutrient ratios/percentages (plain text). "
-        "4) 'avoid': a short text description of foods to avoid (plain text). "
-        "Be sure each list has exactly 15 items. Return only valid JSON, no extra commentary.\n\n"
-        f"Activity: {activity}\n"
-        f"Time until activity: {time_until_activity} hours\n\n"
-        "Again, provide only valid JSON with those four keys, and do not add extra keys, disclaimers, or text."
+        "Provide guidance on what to consume for the following activity: "
+        f"{activity}, with {time_until_activity} hours until that activity. "
+        "Output only valid JSON with exactly four keys: 'foods_to_eat', 'foods_to_avoid', 'do_eat', and 'avoid'. "
+        "\n\n"
+        "1) 'foods_to_eat': a list of 15 meal or snack items that a 17-year-old could realistically find at a "
+        "convenience store (e.g., 7-Eleven) or from a fast-food place (e.g., Chipotle). "
+        "Each item should be a short string including the food name and approximate macronutrient percentages for carbs, fats, and protein. "
+        "For example: 'Grilled Chicken Burrito (Carbs: 45, Fats: 20, Protein: 35)'. "
+        "\n\n"
+        "2) 'foods_to_avoid': a list of 15 items that a 17-year-old should avoid. Each item should also be a short string "
+        "with the name plus approximate carbs/fats/protein. For example: 'Glazed Doughnut (Carbs: 70, Fats: 25, Protein: 5)'. "
+        "\n\n"
+        "3) 'do_eat': a short plain-text explanation of recommended macronutrient ratios. "
+        "\n\n"
+        "4) 'avoid': a short plain-text explanation of which types of foods or drinks to avoid. "
+        "\n\n"
+        "Return only valid JSON with the keys 'foods_to_eat', 'foods_to_avoid', 'do_eat', and 'avoid'. "
+        "No disclaimers or extra commentary, and do not add additional keys."
     )
+
 
     # Build the list of messages for the chat model
     messages = [
